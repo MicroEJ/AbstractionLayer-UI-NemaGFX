@@ -7,7 +7,7 @@ MicroEJ C Component: microui-nemagfx.
 
 1. Add the following line to your `module.ivy`:
 
-    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="1.0.0"/>
+    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="1.1.0"/>
 2. In the bsp project, add all the C files from these folder: `src\main\c\ui\src`.
 3. Add this folder in the include path: `src\main\c\ui\inc`.
 4. Follow the installation steps described in `ui_drawing_nema.h`. 

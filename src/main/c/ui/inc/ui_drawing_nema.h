@@ -28,7 +28,7 @@ extern "C" {
  *         of the define "NEMA_INTERRUPT_MODE".
  *
  * @author MicroEJ Developer Team
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 // -----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ extern "C" {
 #if !defined(LLUI_GC_SUPPORTED_FORMATS) || (LLUI_GC_SUPPORTED_FORMATS <= 1)
 
 /*
- * The fonctions UI_DRAWING_NEMA_xxx() are directly called by LLUI_PAINTER_impl.c
+ * The functions UI_DRAWING_NEMA_xxx() are directly called by LLUI_PAINTER_impl.c
  * and LLDW_PAINTER_impl.c. This file overrides each function independently to use the
  * NemaGFX.
  */
@@ -94,7 +94,7 @@ extern "C" {
 #else // !defined(LLUI_GC_SUPPORTED_FORMATS) || (LLUI_GC_SUPPORTED_FORMATS <= 1)
 
 /*
- * The fonctions UI_DRAWING_NEMA_xxx() are indirectly called through some tables.
+ * The functions UI_DRAWING_NEMA_xxx() are indirectly called through some tables.
  * The functions have got the identifier "0" as suffix. This file overrides each function
  * independently to use the NemaGFX.
  */
