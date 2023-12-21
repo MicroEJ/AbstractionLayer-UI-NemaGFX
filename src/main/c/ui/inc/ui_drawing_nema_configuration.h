@@ -27,7 +27,7 @@ extern "C" {
  * This value must not be changed by the user of the CCO.
  * This value must be incremented by the implementor of the CCO when a configuration define is added, deleted or modified.
  */
-#define NEMA_CONFIGURATION_VERSION (1)
+#define NEMA_CONFIGURATION_VERSION (2)
 
 #error "This header must be customized with VEE Port-specific configuration. Remove this #error when done. This file is not modified when a new version of the CCO is installed."
 
@@ -140,6 +140,15 @@ extern "C" {
  * instead.
  */
 //#define ENABLE_SIMPLE_LINES
+
+/*
+ * @brief The nema_draw_line_aa() API does not respect the thick faded line conditions
+ * exactly: the line can be one pixel smaller across the width, one pixel shifted upwards,
+ * etc. The differences appear depending on the thickness and fade of the line.
+ *
+ * By default, this hardware acceleration is disabled.
+ */
+//#define ENABLE_FADED_LINES
 
 /*
  * @brief Some GPU might not able to render the images in specific memories. Comment

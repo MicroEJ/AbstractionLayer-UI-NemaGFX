@@ -28,7 +28,7 @@ extern "C" {
  *         of the define "NEMA_INTERRUPT_MODE".
  *
  * @author MicroEJ Developer Team
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 // -----------------------------------------------------------------------------

@@ -36,7 +36,7 @@
 #error "Undefined NEMA_CONFIGURATION_VERSION, it must be defined in ui_drawing_nema_configuration.h"
 #endif
 
-#if defined NEMA_CONFIGURATION_VERSION && NEMA_CONFIGURATION_VERSION != 1
+#if defined NEMA_CONFIGURATION_VERSION && NEMA_CONFIGURATION_VERSION != 2
 #error "Version of the configuration file ui_drawing_nema_configuration.h is not compatible with this implementation."
 #endif
 
@@ -781,9 +781,10 @@ DRAWING_Status UI_DRAWING_NEMA_drawThickCircle(MICROUI_GraphicsContext* gc, jint
 }
 #endif
 
+#ifdef ENABLE_FADED_LINES
 DRAWING_Status UI_DRAWING_NEMA_drawThickFadedLine(MICROUI_GraphicsContext* gc, jint startX, jint startY, jint endX, jint endY, jint thickness, jint fade, DRAWING_Cap startCap, DRAWING_Cap endCap) {
 
-	DRAWING_Status status;
+	DRAWING_Status status = DRAWING_DONE;
 	uint32_t color;
 
 	if (IS_COMPATIBLE_FADE(fade) && (startCap == DRAWING_ENDOFLINE_NONE) && (endCap == DRAWING_ENDOFLINE_NONE)) {
@@ -804,12 +805,12 @@ DRAWING_Status UI_DRAWING_NEMA_drawThickFadedLine(MICROUI_GraphicsContext* gc, j
 		// else: out of clip
 
 	} else {
-		DW_DRAWING_SOFT_drawThickFadedLine(gc, startX, startY, endX, endY, thickness, fade, startCap, endCap);
-		status = DRAWING_DONE;
+		status = DW_DRAWING_SOFT_drawThickFadedLine(gc, startX, startY, endX, endY, thickness, fade, startCap, endCap);
 	}
 
 	return status;
 }
+#endif
 
 #ifdef ENABLE_DYNAMIC_SHAPES
 DRAWING_Status UI_DRAWING_NEMA_drawThickFadedCircle(MICROUI_GraphicsContext* gc, jint x, jint y, jint diameter, jint thickness, jint fade) {
