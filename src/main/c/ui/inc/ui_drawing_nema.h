@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2024 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -18,17 +18,9 @@ extern "C" {
  * implementations over the NemaGFX and the destination buffer format is NEMA_RGB565. When the
  * drawing cannot be performed by the GPU, the software implementation is used insted.
  *
- * How to use this library:
- *
- * - Call "UI_DRAWING_NEMA_initialize()" during "LLUI_DISPLAY_IMPL_initialize()"
- * - Call "UI_DRAWING_NEMA_configure_memcpy()" in "LLUI_DISPLAY_IMPL_flush()" (optional)
- * - Call "UI_DRAWING_NEMA_post_operation()" according to the define "NEMA_INTERRUPT_MODE":
- *      a) Call "UI_DRAWING_NEMA_post_operation()" in Nema GPU interrupt routine (interrupt mode)
- *   or b) call "UI_DRAWING_NEMA_post_operation()" in a dedicated task (task mode), see the comment
- *         of the define "NEMA_INTERRUPT_MODE".
  *
  * @author MicroEJ Developer Team
- * @version 1.2.0
+ * @version 2.0.0
  */
 
 // -----------------------------------------------------------------------------

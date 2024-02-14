@@ -1,28 +1,49 @@
 
 # Overview
 
-MicroEJ C Component: microui-nemagfx.
+MicroEJ C Component: `com.microej.clibrary.llimpl#microui-nemagfx`.
+
+This component implements some Low-Level API (LLAPI) of MicroUI-3.x over the Think Silicon NemaGFX. 
+Refer to the VEE Porting Guide > Graphics User Interface > C Module to have more information on this module.
+
+## UI Pack Compatibility
+
+This compoment is MicroEJ UI Pack dependent: it is compatible with a one or several MicroEJ UI Pack versions. The following table illustrates the compatibility:
+
+| Component     | MicroEJ UI Pack   |
+| ------------- | ----------------- |
+| 2.0.0         | [14.0.0 - 15.0.0[ | 
+| [1.1.0-1.2.0] | [13.7.0 - 14.0.0[ |
+| 1.0.0         | [13.5.0 - 13.7.0[ |
+
+> note: this component is useless (and not compatible) for the MicroEJ UI Packs before version 13.5.0.
 
 # Usage
 
 1. Add the following line to your `module.ivy`:
 
-    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="1.2.0"/>
-2. In the bsp project, add all the C files from these folder: `src\main\c\ui\src`.
-3. Add this folder in the include path: `src\main\c\ui\inc`.
-4. Follow the installation steps described in `ui_drawing_nema.h`. 
-5. Adjust configuration: see `ui_drawing_nema_configuration.h` (and comment the directive `#error`).  
+    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="2.0.0"/>
+
+2. Follow the **Usage** chapters of each component part (see VEE Porting Guide > Graphics User Interface > C Module)
+
+# Migration Guide
+
+The migration guides are described in the VEE Porting Guide > Graphical User Interface > Migration Guide. 
 
 # Requirements
+
 N/A
 
 # Dependencies
+
 _All dependencies are retrieved transitively by Ivy resolver._
 
 # Source
+
 N/A
 
 # Restrictions
+
 N/A
 
 # Known Errors
@@ -38,5 +59,5 @@ With the Apollo4 Plus board, the UI testsuite does not fully work for rotating i
 To avoid a GPU hang on the Apollo4 plus board, you will need to put the resources out of the MRAM and SRAM memory range.
 
 ---
-_Copyright 2023 MicroEJ Corp. All rights reserved.
-_Use of this source code is governed by a BSD-style license that can be found with this software.
+_Copyright 2023-2024 MicroEJ Corp. All rights reserved._  
+_Use of this source code is governed by a BSD-style license that can be found with this software._  

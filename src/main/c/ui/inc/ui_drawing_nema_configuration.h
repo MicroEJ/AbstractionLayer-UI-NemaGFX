@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2024 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -9,6 +9,10 @@
  * @file
  * @brief MicroEJ MicroUI library low level API: implementation over NemaGFX. Provides
  * a set of defines to configure the implementation.
+ *
+ * Refer to the VEE Porting Guide > Graphics User Interface > C Module documentation to have more
+ * information about the feature of this C module, how to use it and how to configure it.
+ *
  * @author MicroEJ Developer Team
  */
 

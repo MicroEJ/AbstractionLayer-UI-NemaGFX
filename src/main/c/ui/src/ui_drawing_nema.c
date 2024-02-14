@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2024 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -28,7 +28,7 @@
  * Sanity check between the expected version of the configuration and the actual version of
  * the configuration.
  * If an error is raised here, it means that a new version of the CCO has been installed and
- * the configuration async_select_configuration.h must be updated based on the one provided
+ * the configuration ui_drawing_nema_configuration.h must be updated based on the one provided
  * by the new CCO version.
  */
 
@@ -39,17 +39,6 @@
 #if defined NEMA_CONFIGURATION_VERSION && NEMA_CONFIGURATION_VERSION != 2
 #error "Version of the configuration file ui_drawing_nema_configuration.h is not compatible with this implementation."
 #endif
-
-// --------------------------------------------------------------------------------
-// Types
-// --------------------------------------------------------------------------------
-
-/*
- * @brief Function used to notify the Graphical Engine about the end of GPU work.
- * Available values are LLUI_DISPLAY_notifyAsynchronousDrawingEnd(), LLUI_DISPLAY_flushDone()
- * and _callback_end_of_drawing().
- */
-typedef void (*_gpu_callback_t)(bool under_isr);
 
 // -----------------------------------------------------------------------------
 // Macros and Defines
@@ -88,11 +77,6 @@ static bool g_gpu_running;
  */
 static void* _sem_gpu;
 
-/*
- * @brief Callback after the GPU work.
- */
-static _gpu_callback_t g_callback_notification;
-
 // -----------------------------------------------------------------------------
 // Internal functions
 // -----------------------------------------------------------------------------
@@ -124,23 +108,6 @@ static inline uint32_t _convert_color(uint32_t c) {
 }
 
 /*
- * @brief Called when a drawing has been done
- */
-static void _callback_end_of_drawing(bool from_isr) {
-
-	// update flush limits
-	int minx;
-	int miny;
-	int maxx;
-	int maxy;
-	nema_get_dirty_region(&minx, &miny, &maxx, &maxy);
-	LLUI_DISPLAY_setDrawingLimits(minx, miny, maxx, maxy);
-
-	// notify the Graphics Engine
-	LLUI_DISPLAY_notifyAsynchronousDrawingEnd(from_isr);
-}
-
-/*
  * @brief Resets the GPU command list with the new destination (RGB565 format for sure).
  * Returns false when there is nothing to draw.
  * Updates nema_color with graphics context foreground color (in Nema GPU format)
@@ -161,7 +128,7 @@ static bool _nemacmdlist_reset(MICROUI_GraphicsContext* gc, int x1, int y1, int 
 	if (LLUI_DISPLAY_isClipEnabled(gc)) {
 		if (LLUI_DISPLAY_clipRectangle(gc, &x1, &y1, &x2, &y2)) {
 			// drawing fully or partially fits the clip: enable clip
-			nema_set_clip(gc->clip_x1, gc->clip_y1, gc->clip_x2-gc->clip_x1+1, gc->clip_y2-gc->clip_y1+1);
+			nema_set_clip(gc->clip.x1, gc->clip.y1, UI_RECT_get_width(&gc->clip), UI_RECT_get_height(&gc->clip));
 		}
 		else {
 			// drawing is fully outside the clip, nothing to draw
@@ -185,9 +152,6 @@ static bool _nemacmdlist_reset(MICROUI_GraphicsContext* gc, int x1, int y1, int 
 
 		// retrieve the color to use
 		*nema_color = _convert_color(gc->foreground_color);
-
-		g_callback_notification = &_callback_end_of_drawing;
-
 	}
 
 	// perform drawing
@@ -405,9 +369,9 @@ void UI_DRAWING_NEMA_initialize(void* binary_semaphore) {
 #ifdef ENABLE_DYNAMIC_SHAPES
 #warning "GPU's command list size is dynamic!"
 	// when the command list cannot be increased, the GPU discards the drawing.
-	command_list  = nema_cl_create();
+	command_list = nema_cl_create();
 #else
-	command_list  = nema_cl_create_sized(0x200); // at least 277 bytes
+	command_list = nema_cl_create_sized(0x200); // at least 277 bytes
 #endif
 	g_gpu_running = false;
 }
@@ -427,7 +391,7 @@ void UI_DRAWING_NEMA_post_operation(void) {
 
 	g_gpu_running = false;
 	LLUI_DISPLAY_IMPL_binarySemaphoreGive(_sem_gpu, from_isr);
-	g_callback_notification(from_isr);
+	LLUI_DISPLAY_notifyAsynchronousDrawingEnd(from_isr);
 }
 
 void UI_DRAWING_NEMA_configure_memcpy(uint8_t* src, uint8_t* dst, uint32_t xmin, uint32_t ymin, uint32_t xmax, uint32_t ymax) {
@@ -459,9 +423,6 @@ void UI_DRAWING_NEMA_configure_memcpy(uint8_t* src, uint8_t* dst, uint32_t xmin,
 			NEMA_FILTER_PS
 	);
 
-	// change the nofication
-	g_callback_notification = &LLUI_DISPLAY_flushDone;
-
 	// add "copy buffer" cmd
 	nema_blit_subrect(xmin, ymin, xmax - xmin + 1u, ymax - ymin + 1u, xmin, ymin);
 
@@ -470,7 +431,7 @@ void UI_DRAWING_NEMA_configure_memcpy(uint8_t* src, uint8_t* dst, uint32_t xmin,
 }
 
 // See the header file for the function documentation
-void UI_DRAWING_NEMA_start_memcpy(void)  {
+void UI_DRAWING_NEMA_start_memcpy(void) {
 	// launch the memcpy previously configured
 	(void)_submit_operation();
 }
@@ -507,7 +468,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawLine(MICROUI_GraphicsContext* gc, jint startX
 	// else: out of clip
 
 	return status;
-}  
+}
 
 #ifdef ENABLE_SIMPLE_LINES
 // See the header file for the function documentation
@@ -534,7 +495,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawVerticalLine(MICROUI_GraphicsContext* gc, jin
 	uint32_t color;
 
 	if (_nemacmdlist_reset(gc, x, y1, x, y2, &color, MSAA_DISABLED)) {
-		nema_draw_line(x, y1, x, y1, color);
+		nema_draw_line(x, y1, x, y2, color);
 		status = _submit_operation();
 	}
 	// else: out of clip
