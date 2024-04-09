@@ -22,7 +22,7 @@ This compoment is MicroEJ UI Pack dependent: it is compatible with a one or seve
 
 1. Add the following line to your `module.ivy`:
 
-    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="2.0.0"/>
+    <dependency org="com.microej.clibrary.llimpl" name="microui-nemagfx" rev="2.0.1"/>
 
 2. Follow the **Usage** chapters of each component part (see VEE Porting Guide > Graphics User Interface > C Module)
 

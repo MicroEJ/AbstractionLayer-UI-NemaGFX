@@ -20,7 +20,7 @@ extern "C" {
  *
  *
  * @author MicroEJ Developer Team
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 // -----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ void UI_DRAWING_NEMA_initialize(void* binary_semaphore);
 void UI_DRAWING_NEMA_post_operation(void);
 
 /*
- * @brief Configures the copy from frame buffer to back buffer just after a flush.
+ * @brief Configures the copy from a buffer to another buffer.
  *
  * @param[in] src the address of the buffer to copy.
  * @param[in] dst the address of the destination buffer.

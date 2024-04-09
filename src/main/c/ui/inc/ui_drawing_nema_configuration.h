@@ -69,17 +69,17 @@ extern "C" {
 #define BACK_BUFFER_FORMAT (NEMA_RGB565) // NEMA_RGB565 | NEMA_BGRA8888
 
 /*
- * @brief Specifies the display frame buffer format. This format may be the different
- * than the BACK_BUFFER_FORMAT. This is useful to use a compressed format (TSCx) that
+ * @brief Specifies the front buffer format. This format may be the different
+ * from the BACK_BUFFER_FORMAT. This is useful to use a compressed format (TSCx) that
  * requires less memory than standard raster format.
  *
  * Notes:
  *
  * - The implementation of LLUI_DISPLAY_impl.h must be in COPY mode: the implementation
- * of flush() consists to copy the content of the BACK buffer to the FRAME buffer (the
+ * of flush() consists to copy the content of the BACK buffer to the FRONT buffer (the
  * implementation should use the functions UI_DRAWING_NEMA_configure_memcpy() and
  * UI_DRAWING_NEMA_start_memcpy()).
- * - In SWITCH mode, the both buffers (BACK and FRAME) must have the same format.
+ * - In SWAP mode, both buffers (BACK and FRONT) must have the same format.
  *
  * The buffer size is:
  *
