@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2024-07-19
+
+- Compatible with MicroEJ UI Pack 14.0.x.
+
+### Added
+
+- Add some functions to manipulate the clip:
+    - `UI_NEMA_get_clip`,
+    - `UI_NEMA_set_clip`,
+    - `UI_NEMA_set_clip_target`,
+    - `UI_NEMA_set_clip_region`,
+    - `UI_NEMA_set_clip_area`.
+- Add some functions to manipulate the GPU command list:
+    - `UI_NEMA_cmdlist_reset`,
+    - `UI_NEMA_cmdlist_submit`.
+- Add `UI_NEMA_convert_color`.
+
+### Changed
+
+- Install the files in the `ui_nemagfx` directory.
+- Rename `ui_drawing_nema_configuration.h` to `ui_nema_configuration.h`.
+- Use a circular GPU command queue.
+- Increase the version of the configuration file (3).
+- Move some functions from `ui_drawing_nema.h` to `ui_nema.h`.
+    - `UI_DRAWING_NEMA_initialize` becomes `UI_NEMA_initialize`
+    - `UI_DRAWING_NEMA_post_operation` becomes `UI_NEMA_post_operation`
+    - `UI_DRAWING_NEMA_configure_memcpy` becomes `UI_NEMA_configure_memcpy`
+    - `UI_DRAWING_NEMA_start_memcpy` becomes `UI_NEMA_start_memcpy`
+
+### Fixed
+
+- Fix the function declarations according to the define `ENABLE_SIMPLE_LINES`.
+- Fix copying an image region from and to the same buffer.
+
+### Removed
+
+- Remove the configuration `ENABLE_DYNAMIC_SHAPES`: useless with a circular queue.
+- Remove the GPU "task" mode and the configuration `NEMA_INTERRUPT_MODE`: only GPU "interrupt" mode is available.
+    - `UI_DRAWING_NEMA_IMPL_operation_submitted` is removed.
+
 ## [2.0.1] - 2024-04-09
 
 - Compatible with MicroEJ UI Pack 14.0.x.
@@ -61,7 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
  - Creation of the CCO.
- 
+
 ---
-_Copyright 2023-2024 MicroEJ Corp. All rights reserved._  
-_Use of this source code is governed by a BSD-style license that can be found with this software._  
+_Copyright 2023-2024 MicroEJ Corp. All rights reserved._\
+_Use of this source code is governed by a BSD-style license that can be found with this software._

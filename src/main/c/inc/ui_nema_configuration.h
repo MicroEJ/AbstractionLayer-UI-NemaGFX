@@ -16,8 +16,8 @@
  * @author MicroEJ Developer Team
  */
 
-#if !defined UI_DRAWING_NEMA_CONF_H
-#define UI_DRAWING_NEMA_CONF_H
+#if !defined UI_NEMA_CONFIGURATION_H
+#define UI_NEMA_CONFIGURATION_H
 
 #if defined __cplusplus
 extern "C" {
@@ -29,11 +29,13 @@ extern "C" {
  * is compatible with the implementation.
  *
  * This value must not be changed by the user of the CCO.
- * This value must be incremented by the implementor of the CCO when a configuration define is added, deleted or modified.
+ * This value must be incremented by the implementor of the CCO when a configuration define is added, deleted or
+ * modified.
  */
-#define NEMA_CONFIGURATION_VERSION (2)
+#define NEMA_CONFIGURATION_VERSION (3)
 
-#error "This header must be customized with VEE Port-specific configuration. Remove this #error when done. This file is not modified when a new version of the CCO is installed."
+#error \
+	"This header must be customized with VEE Port-specific configuration. Remove this #error when done. This file is not modified when a new version of the CCO is installed."
 
 // -----------------------------------------------------------------------------
 // Configuration
@@ -77,8 +79,8 @@ extern "C" {
  *
  * - The implementation of LLUI_DISPLAY_impl.h must be in COPY mode: the implementation
  * of flush() consists to copy the content of the BACK buffer to the FRONT buffer (the
- * implementation should use the functions UI_DRAWING_NEMA_configure_memcpy() and
- * UI_DRAWING_NEMA_start_memcpy()).
+ * implementation should use the functions UI_NEMA_configure_memcpy() and
+ * UI_NEMA_start_memcpy()).
  * - In SWAP mode, both buffers (BACK and FRONT) must have the same format.
  *
  * The buffer size is:
@@ -92,49 +94,6 @@ extern "C" {
 // -----------------------------------------------------------------------------
 // Options
 // -----------------------------------------------------------------------------
-
-/*
- * @brief Specifies the "end of GPU operation" mode.
- *
- * When set (== interrupt mode), the nema interrupt routine MUST call the function UI_DRAWING_NEMA_post_operation() to notify
- * the end of the last GPU operation.
- *
- * When unset (== task mode), the VEE Port has to use a task that MUST call the function UI_DRAWING_NEMA_post_operation() to
- * wait the end of the last GPU operation. It also has to implement the low level API UI_DRAWING_NEMA_IMPL_operation_submitted()
- * to unlock this task:
- *
- * void UI_DRAWING_NEMA_IMPL_operation_submitted(void) {
- * 	tx_semaphore_put(&_sem_gpu);
- * }
- *
- * static void _gpu_thread_entry(ULONG thread_input) {
- * 	while(true) {
- * 		LLUI_DISPLAY_IMPL_binarySemaphoreTake((void*)&_sem_gpu);
- * 		UI_DRAWING_NEMA_post_operation();
- * 	}
- * }
- *
- * By default the interrupt mode is selected.
- */
-#define NEMA_INTERRUPT_MODE
-
-/*
- * @brief To draw a shape, the GPU uses the command list. For rectangular shapes
- * (draw/fill rectangles and images), the max list size is fixed (around 300 bytes).
- *
- * For the other shapes (circle, etc.) the list increases according to the shape's size
- * (dynamic shape): several blocks of 1024 bytes and 40 bytes are allocated and never
- * freed (set breakpoints on assembler functions "tsi_malloc_pool" and "tsi_free").
- *
- * Note: "nema_draw_circle" internally calls "nema_draw_rounded_rect" that consumes the
- * 1024 & 40 bytes blocks.
- *
- * By default the dynamic shapes are disabled and the software algorithms are used
- * instead.
- *
- * To enable these drawings, the command list size must be calibrated.
- */
-//#define ENABLE_DYNAMIC_SHAPES
 
 /*
  * @brief The software algorithms are faster than GPU to draw horizontal and vertical
@@ -168,4 +127,4 @@ extern "C" {
 }
 #endif
 
-#endif // !defined UI_DRAWING_NEMA_CONF_H
+#endif // !defined UI_NEMA_CONFIGURATION_H
