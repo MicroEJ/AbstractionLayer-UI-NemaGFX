@@ -18,7 +18,7 @@ extern "C" {
  * a set of helper functions to target the NEMA library.
  *
  * @author MicroEJ Developer Team
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 // -----------------------------------------------------------------------------

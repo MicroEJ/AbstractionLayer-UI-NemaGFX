@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_drawing_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 // -----------------------------------------------------------------------------
@@ -129,11 +129,8 @@ static bool _nemacmdlist_configure_source(MICROUI_Image *img, uint32_t nema_colo
 	if (ret) {
 		nema_set_blend_blit(blending_mode | NEMA_BLOP_MODULATE_A);
 		nema_set_const_color(alpha << 24);
-		nema_bind_src_tex((uintptr_t)LLUI_DISPLAY_getBufferAddress(img),
-		                  img->width, img->height,
-		                  format,
-		                  LLUI_DISPLAY_getStrideInBytes(img),
-		                  mode);
+		nema_bind_src_tex((uintptr_t)LLUI_DISPLAY_getBufferAddress(img), img->width, img->height, format,
+		                  LLUI_DISPLAY_getStrideInBytes(img), mode);
 	}
 
 	return ret;
@@ -186,10 +183,7 @@ static bool _rotate_image(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint 
 			nema_mat3x3_mul_vec(m, &x3, &y3);
 
 			// draw image
-			nema_blit_quad_fit(x0, y0,
-			                   x1, y1,
-			                   x2, y2,
-			                   x3, y3);
+			nema_blit_quad_fit(x0, y0, x1, y1, x2, y2, x3, y3);
 
 			*status = UI_NEMA_cmdlist_submit();
 		}
@@ -207,11 +201,8 @@ static bool _scale_image(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint x
                          jfloat factorY, jint alpha, nema_tex_mode_t mode, DRAWING_Status *status) {
 	bool ret = true;
 	uint32_t color;
-	if (!_nemacmdlist_reset(
-			gc, x, y,
-			(int)(x + (factorX * img->width)),
-			(int)(y + (factorY * img->height)),
-			&color, MSAA_ENABLED)) {
+	if (!_nemacmdlist_reset(gc, x, y, (int)(x + (factorX * img->width)), (int)(y + (factorY * img->height)), &color,
+	                        MSAA_ENABLED)) {
 		*status = DRAWING_DONE;
 	} else {
 		// configure GPU with the image to render
@@ -265,12 +256,9 @@ static DRAWING_Status _render_circle(MICROUI_GraphicsContext *gc, jfloat x, jflo
 	DRAWING_Status status = DRAWING_DONE;
 	uint32_t color;
 
-	if (_nemacmdlist_reset(gc,
-	                       (int)(x - (thickness / 2)),
-	                       (int)(y - (thickness / 2)),
-	                       (int)(x + diameter - 1 + (thickness / 2)),
-	                       (int)(y + diameter - 1 + (thickness / 2)),
-	                       &color, msaa)) {
+	if (_nemacmdlist_reset(gc, (int)(x - (thickness / 2)), (int)(y - (thickness / 2)),
+	                       (int)(x + diameter - 1 + (thickness / 2)), (int)(y + diameter - 1 + (thickness / 2)), &color,
+	                       msaa)) {
 		jfloat radius = diameter / 2;
 		if (0 == thickness) {
 			nema_fill_circle_aa(x + radius, y + radius, radius, color);
@@ -549,13 +537,8 @@ DRAWING_Status UI_DRAWING_NEMA_drawThickLine(MICROUI_GraphicsContext *gc, jint x
 	int max_x = MAX(x1, x2);
 	int max_y = MAX(y1, y2);
 
-	if (_nemacmdlist_reset(
-			gc,
-			min_x - (thickness / 2),
-			min_y - (thickness / 2),
-			max_x + (thickness / 2),
-			max_y + (thickness / 2),
-			&color, MSAA_DISABLED)) {
+	if (_nemacmdlist_reset(gc, min_x - (thickness / 2), min_y - (thickness / 2), max_x + (thickness / 2),
+	                       max_y + (thickness / 2), &color, MSAA_DISABLED)) {
 		nema_draw_line_aa(x1, y1, x2, y2, thickness, color);
 		status = UI_NEMA_cmdlist_submit();
 	}
@@ -581,13 +564,8 @@ DRAWING_Status UI_DRAWING_NEMA_drawThickFadedLine(MICROUI_GraphicsContext *gc, j
 		int min_y = MIN(startY, endY);
 		int max_x = MAX(startX, endX);
 		int max_y = MAX(startY, endY);
-		if (_nemacmdlist_reset(
-				gc,
-				min_x - (thickness / 2),
-				min_y - (thickness / 2),
-				max_x + (thickness / 2),
-				max_y + (thickness / 2),
-				&color, (fade == 0) ? MSAA_DISABLED : MSAA_ENABLED)) {
+		if (_nemacmdlist_reset(gc, min_x - (thickness / 2), min_y - (thickness / 2), max_x + (thickness / 2),
+		                       max_y + (thickness / 2), &color, (fade == 0) ? MSAA_DISABLED : MSAA_ENABLED)) {
 			nema_draw_line_aa(startX, startY, endX, endY, GET_THICKNESS(thickness, fade), color);
 			status = UI_NEMA_cmdlist_submit();
 		}

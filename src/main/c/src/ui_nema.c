@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 // -----------------------------------------------------------------------------
@@ -56,13 +56,8 @@ void UI_NEMA_cmdlist_reset(MICROUI_GraphicsContext *gc, int msaa) {
 	nema_enable_aa(msaa, msaa, msaa, msaa);
 
 	// configure destination
-	nema_bind_dst_tex(
-		(uintptr_t)LLUI_DISPLAY_getBufferAddress(&gc->image),
-		gc->image.width,
-		gc->image.height,
-		NEMA_RGB565,
-		LLUI_DISPLAY_getStrideInBytes(&gc->image)
-		);
+	nema_bind_dst_tex((uintptr_t)LLUI_DISPLAY_getBufferAddress(&gc->image), gc->image.width, gc->image.height,
+	                  NEMA_RGB565, LLUI_DISPLAY_getStrideInBytes(&gc->image));
 }
 
 // See the header file for the function documentation
@@ -242,23 +237,13 @@ void UI_NEMA_configure_memcpy(uint8_t *src, uint8_t *dst, uint32_t xmin, uint32_
 	nema_set_clip(xmin, ymin, xmax - xmin + 1u, ymax - ymin + 1u);
 
 	// configure destination
-	nema_bind_dst_tex(
-		// cppcheck-suppress [misra-c2012-11.4] Pointer cast for function signature.
-		(uintptr_t)dst,
-		DISPLAY_WIDTH, DISPLAY_HEIGHT,
-		FRAME_BUFFER_FORMAT,
-		-1
-		);
+	// cppcheck-suppress [misra-c2012-11.4] Pointer cast for function signature.
+	nema_bind_dst_tex((uintptr_t)dst, DISPLAY_WIDTH, DISPLAY_HEIGHT, FRAME_BUFFER_FORMAT, -1);
 
 	// configure source
 	nema_set_blend_blit(NEMA_BL_SRC_OVER);
 	// cppcheck-suppress [misra-c2012-11.4] Pointer cast for function signature.
-	nema_bind_src_tex((uintptr_t)src,
-	                  DISPLAY_WIDTH, DISPLAY_HEIGHT,
-	                  BACK_BUFFER_FORMAT,
-	                  -1,
-	                  NEMA_FILTER_PS
-	                  );
+	nema_bind_src_tex((uintptr_t)src, DISPLAY_WIDTH, DISPLAY_HEIGHT, BACK_BUFFER_FORMAT, -1, NEMA_FILTER_PS);
 
 	// add "copy buffer" cmd
 	nema_blit_subrect(xmin, ymin, xmax - xmin + 1u, ymax - ymin + 1u, xmin, ymin);

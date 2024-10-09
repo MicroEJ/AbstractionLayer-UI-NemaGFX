@@ -5,6 +5,7 @@
 
 #if !defined UI_DRAWING_NEMA_PROCESS_H
 #define UI_DRAWING_NEMA_PROCESS_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,7 +17,7 @@ extern "C" {
  * are converted to NemaVG objects and then a drawing function is called to render the
  * drawing.
  * @author MicroEJ Developer Team
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 // --------------------------------------------------------------------------------
@@ -45,31 +46,24 @@ extern "C" {
 /*
  * @brief Function to draw a path.
  */
-typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_draw_path_t) (MICROUI_GraphicsContext *gc,
-                                                                int seg_size, uint8_t *seg, int data_size,
-                                                                nema_vg_float_t *data, const nema_vg_float_t *bbox,
-                                                                uint8_t fill_rule,
-                                                                nema_matrix3x3_t matrix,
-                                                                uint32_t blend,
+typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_draw_path_t) (MICROUI_GraphicsContext *gc, int seg_size, uint8_t *seg,
+                                                                int data_size, nema_vg_float_t *data,
+                                                                const nema_vg_float_t *bbox, uint8_t fill_rule,
+                                                                nema_matrix3x3_t matrix, uint32_t blend,
                                                                 uint32_t color);
 
 /*
  * @brief Function to blit a part of the source.
  */
-typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_blit_rect_t)(MICROUI_GraphicsContext *gc,
-                                                               void *source,
-                                                               uint32_t *rect,
-                                                               nema_matrix3x3_t matrix,
-                                                               uint32_t blend,
-                                                               uint32_t color,
-                                                               nema_tex_mode_t filter);
+typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_blit_rect_t)(MICROUI_GraphicsContext *gc, void *source,
+                                                               uint32_t *rect, nema_matrix3x3_t matrix, uint32_t blend,
+                                                               uint32_t color, nema_tex_mode_t filter);
 
 /*
  * @brief Function to clear the source.
  */
-typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_clear_t)(MICROUI_GraphicsContext *gc,
-                                                           float x, float y, float w, float h,
-                                                           uint32_t color);
+typedef DRAWING_Status (* UI_DRAWING_NEMA_PROCESS_clear_t)(MICROUI_GraphicsContext *gc, float x, float y, float w,
+                                                           float h, uint32_t color);
 
 // --------------------------------------------------------------------------------
 // Public API
@@ -300,4 +294,5 @@ DRAWING_Status UI_DRAWING_NEMA_PROCESS_drawScaledImageBilinear(UI_DRAWING_NEMA_P
 #ifdef __cplusplus
 }
 #endif
+
 #endif // UI_DRAWING_NEMA_PROCESS_H

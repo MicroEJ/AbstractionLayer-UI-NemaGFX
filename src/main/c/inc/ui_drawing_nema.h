@@ -19,7 +19,7 @@ extern "C" {
  * drawing cannot be performed by the GPU, the software implementation is used insted.
  *
  * @author MicroEJ Developer Team
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 // -----------------------------------------------------------------------------
@@ -27,6 +27,7 @@ extern "C" {
 // -----------------------------------------------------------------------------
 
 #include "ui_drawing.h"
+#include "ui_configuration.h"
 #include "ui_nema_configuration.h"
 
 #include "nema_cmdlist.h"
@@ -35,7 +36,7 @@ extern "C" {
 // Macros
 // -----------------------------------------------------------------------------
 
-#if !defined(LLUI_GC_SUPPORTED_FORMATS) || (LLUI_GC_SUPPORTED_FORMATS <= 1)
+#if !defined(UI_GC_SUPPORTED_FORMATS) || (UI_GC_SUPPORTED_FORMATS <= 1)
 
 /*
  * The functions UI_DRAWING_NEMA_xxx() are directly called by LLUI_PAINTER_impl.c
@@ -71,7 +72,7 @@ extern "C" {
 #define UI_DRAWING_NEMA_drawThickCircle UI_DRAWING_drawThickCircle
 #define UI_DRAWING_NEMA_drawThickFadedCircle UI_DRAWING_drawThickFadedCircle
 
-#else // !defined(LLUI_GC_SUPPORTED_FORMATS) || (LLUI_GC_SUPPORTED_FORMATS <= 1)
+#else // !defined(UI_GC_SUPPORTED_FORMATS) || (UI_GC_SUPPORTED_FORMATS <= 1)
 
 /*
  * The functions UI_DRAWING_NEMA_xxx() are indirectly called through some tables.
@@ -107,7 +108,7 @@ extern "C" {
 #define UI_DRAWING_NEMA_drawThickCircle UI_DRAWING_drawThickCircle_0
 #define UI_DRAWING_NEMA_drawThickFadedCircle UI_DRAWING_drawThickFadedCircle_0
 
-#endif // !defined(LLUI_GC_SUPPORTED_FORMATS) || (LLUI_GC_SUPPORTED_FORMATS <= 1)
+#endif // !defined(UI_GC_SUPPORTED_FORMATS) || (UI_GC_SUPPORTED_FORMATS <= 1)
 
 // --------------------------------------------------------------------------------
 // ui_drawing.h API
