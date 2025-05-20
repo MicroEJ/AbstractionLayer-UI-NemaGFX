@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023-2024 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2025 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_drawing_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 4.0.0
+ * @version 4.0.1
  */
 
 // -----------------------------------------------------------------------------
@@ -92,23 +92,19 @@ static bool _nemacmdlist_reset(MICROUI_GraphicsContext *gc, int x1, int y1, int 
 static bool _nemacmdlist_configure_source(MICROUI_Image *img, uint32_t nema_color, uint32_t alpha,
                                           nema_tex_mode_t mode) {
 	nema_tex_format_t format;
-	uint32_t blending_mode;
 	bool ret = true;
 
 	switch (img->format) {
 	case MICROUI_IMAGE_FORMAT_ARGB8888:
 		format = NEMA_BGRA8888;
-		blending_mode = NEMA_BL_SIMPLE;
 		break;
 
 	case MICROUI_IMAGE_FORMAT_RGB565:
 		format = NEMA_RGB565;
-		blending_mode = NEMA_BL_SRC_OVER;
 		break;
 
 	case MICROUI_IMAGE_FORMAT_A8:
 		format = NEMA_A8;
-		blending_mode = NEMA_BL_SIMPLE;
 		nema_set_tex_color(nema_color);
 		break;
 
@@ -127,7 +123,7 @@ static bool _nemacmdlist_configure_source(MICROUI_Image *img, uint32_t nema_colo
 	}
 
 	if (ret) {
-		nema_set_blend_blit(blending_mode | NEMA_BLOP_MODULATE_A);
+		nema_set_blend_blit(NEMA_BL_SIMPLE | NEMA_BLOP_MODULATE_A);
 		nema_set_const_color(alpha << 24);
 		nema_bind_src_tex((uintptr_t)LLUI_DISPLAY_getBufferAddress(img), img->width, img->height, format,
 		                  LLUI_DISPLAY_getStrideInBytes(img), mode);
@@ -249,6 +245,42 @@ static DRAWING_Status _draw_region(uint32_t rect[4], nema_matrix3x3_t matrix, ui
 	}
 
 	return UI_NEMA_cmdlist_submit();
+}
+
+static DRAWING_Status _draw_region_overlap(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint x_src, jint y_src,
+                                           jint width, jint height, jint x_dest, jint y_dest, jint alpha) {
+	DRAWING_Status status = DRAWING_DONE;
+	uint32_t color;
+
+	if (_nemacmdlist_reset(gc, x_dest, y_dest, x_dest + width - 1, y_dest + height - 1, &color, MSAA_ENABLED)) {
+		if (_nemacmdlist_configure_source(img, color, alpha, NEMA_FILTER_PS)) {
+			uint32_t blit_rect[4];
+			blit_rect[0] = x_src;
+			blit_rect[1] = y_src;
+			blit_rect[2] = width;
+			blit_rect[3] = height;
+
+			nema_matrix3x3_t matrix;
+			nema_mat3x3_load_identity(matrix);
+			matrix[0][2] = x_dest;
+			matrix[1][2] = y_dest;
+
+			if ((y_dest == y_src) && (x_dest > x_src) && (x_dest < (x_src + width))) {
+				// draw with overlap: cut the drawings in several widths
+				status = _draw_region(blit_rect, matrix, 0);
+			} else if ((y_dest > y_src) && (y_dest < (y_src + height))) {
+				// draw with overlap: cut the drawings in several heights
+				status = _draw_region(blit_rect, matrix, 1);
+			} else {
+				// draw in one shot
+				nema_blit_subrect(x_dest, y_dest, width, height, x_src, y_src);
+				status = UI_NEMA_cmdlist_submit();
+			}
+		}
+		// else: drawing is not running: returns "DONE" which means "nothing has been drawn"
+	}
+
+	return status;
 }
 
 static DRAWING_Status _render_circle(MICROUI_GraphicsContext *gc, jfloat x, jfloat y, jfloat diameter, jfloat thickness,
@@ -434,37 +466,13 @@ DRAWING_Status UI_DRAWING_NEMA_drawImage(MICROUI_GraphicsContext *gc, MICROUI_Im
 DRAWING_Status UI_DRAWING_NEMA_drawRegion(MICROUI_GraphicsContext *gc, jint x_src, jint y_src, jint width, jint height,
                                           jint x_dest, jint y_dest, jint alpha) {
 	DRAWING_Status status = DRAWING_DONE;
-	uint32_t color;
 
-	if (_nemacmdlist_reset(gc, x_dest, y_dest, x_dest + width - 1, y_dest + height - 1, &color, MSAA_ENABLED)) {
-		if (_nemacmdlist_configure_source(&gc->image, color, alpha, NEMA_FILTER_PS)) {
-			uint32_t blit_rect[4];
-			blit_rect[0] = x_src;
-			blit_rect[1] = y_src;
-			blit_rect[2] = width;
-			blit_rect[3] = height;
+	status = _draw_region_overlap(gc, &gc->image, x_src, y_src, width, height, x_dest, y_dest, alpha);
 
-			nema_matrix3x3_t matrix;
-			nema_mat3x3_load_identity(matrix);
-			matrix[0][2] = x_dest;
-			matrix[1][2] = y_dest;
-
-			if ((y_dest == y_src) && (x_dest > x_src) && (x_dest < (x_src + width))) {
-				// draw with overlap: cut the drawings in several widths
-				status = _draw_region(blit_rect, matrix, 0);
-			} else if ((y_dest > y_src) && (y_dest < (y_src + height))) {
-				// draw with overlap: cut the drawings in several heights
-				status = _draw_region(blit_rect, matrix, 1);
-			} else {
-				// draw in one shot
-				nema_blit_subrect(x_dest, y_dest, width, height, x_src, y_src);
-				status = UI_NEMA_cmdlist_submit();
-			}
-		} else {
-			status = UI_DRAWING_SOFT_drawRegion(gc, x_src, y_src, width, height, x_dest, y_dest, alpha);
-		}
+	if (DRAWING_RUNNING != status) {
+		// the GPU is not running -> use the soft algo
+		status = UI_DRAWING_SOFT_drawRegion(gc, x_src, y_src, width, height, x_dest, y_dest, alpha);
 	}
-	// else: out of clip
 
 	return status;
 }
@@ -472,11 +480,16 @@ DRAWING_Status UI_DRAWING_NEMA_drawRegion(MICROUI_GraphicsContext *gc, jint x_sr
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_copyImage(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint regionX, jint regionY,
                                          jint width, jint height, jint x, jint y) {
-	return (LLUI_DISPLAY_getBufferAddress(img) == LLUI_DISPLAY_getBufferAddress(&gc->image)) ?
-	       // have to manage the overlap
-	       UI_DRAWING_NEMA_drawRegion(gc, regionX, regionY, width, height, x, y, 0xff)
-	       // no overlap: draw image as usual
-	        : UI_DRAWING_NEMA_drawImage(gc, img, regionX, regionY, width, height, x, y, 0xff);
+	DRAWING_Status status = DRAWING_DONE;
+
+	status = _draw_region_overlap(gc, img, regionX, regionY, width, height, x, y, 0xff);
+
+	if (DRAWING_RUNNING != status) {
+		// the GPU is not running -> use the soft algo
+		status = UI_DRAWING_SOFT_copyImage(gc, img, regionX, regionY, width, height, x, y);
+	}
+
+	return status;
 }
 
 #ifdef ENABLE_IMAGE_ROTATION

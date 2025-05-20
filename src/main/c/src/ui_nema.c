@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2024 MicroEJ Corp. All rights reserved.
+ * Copyright 2024-2025 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 4.0.0
+ * @version 4.0.1
  */
 
 // -----------------------------------------------------------------------------

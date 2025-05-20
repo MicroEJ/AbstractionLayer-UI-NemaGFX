@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2025 MicroEJ Corp. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -17,7 +17,7 @@ extern "C" {
  * are converted to NemaVG objects and then a drawing function is called to render the
  * drawing.
  * @author MicroEJ Developer Team
- * @version 4.0.0
+ * @version 4.0.1
  */
 
 // --------------------------------------------------------------------------------
