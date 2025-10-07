@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023-2025 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2025 MicroEJ Corp.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -19,7 +19,7 @@ extern "C" {
  * drawing cannot be performed by the GPU, the software implementation is used insted.
  *
  * @author MicroEJ Developer Team
- * @version 4.0.1
+ * @version 5.0.0
  */
 
 // -----------------------------------------------------------------------------
@@ -27,7 +27,6 @@ extern "C" {
 // -----------------------------------------------------------------------------
 
 #include "ui_drawing.h"
-#include "ui_configuration.h"
 #include "ui_nema_configuration.h"
 
 #include "nema_cmdlist.h"
@@ -46,7 +45,7 @@ extern "C" {
 
 #define UI_DRAWING_NEMA_drawLine UI_DRAWING_drawLine
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 
 #define UI_DRAWING_NEMA_drawHorizontalLine UI_DRAWING_drawHorizontalLine
 #define UI_DRAWING_NEMA_drawVerticalLine UI_DRAWING_drawVerticalLine
@@ -82,7 +81,7 @@ extern "C" {
 
 #define UI_DRAWING_NEMA_drawLine UI_DRAWING_drawLine_0
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 
 #define UI_DRAWING_NEMA_drawHorizontalLine UI_DRAWING_drawHorizontalLine_0
 #define UI_DRAWING_NEMA_drawVerticalLine UI_DRAWING_drawVerticalLine_0
@@ -119,7 +118,7 @@ extern "C" {
  */
 DRAWING_Status UI_DRAWING_NEMA_drawLine(MICROUI_GraphicsContext *gc, jint startX, jint startY, jint endX, jint endY);
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 
 /*
  * @brief Implementation of drawHorizontalLine over NemaGFX. See ui_drawing.h

@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2023-2025 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2025 MicroEJ Corp.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_drawing_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 4.0.1
+ * @version 5.0.0
  */
 
 // -----------------------------------------------------------------------------
@@ -29,27 +29,6 @@
 
 #include "nema_blender.h"
 #include "nema_matrix3x3.h"
-#include "nema_utils.h"
-
-// -----------------------------------------------------------------------------
-// Configuration Sanity Check
-// -----------------------------------------------------------------------------
-
-/**
- * Sanity check between the expected version of the configuration and the actual version of
- * the configuration.
- * If an error is raised here, it means that a new version of the CCO has been installed and
- * the configuration ui_nema_configuration.h must be updated based on the one provided
- * by the new CCO version.
- */
-
-#if !defined NEMA_CONFIGURATION_VERSION
-#error "Undefined NEMA_CONFIGURATION_VERSION, it must be defined in ui_nema_configuration.h"
-#endif
-
-#if defined NEMA_CONFIGURATION_VERSION && NEMA_CONFIGURATION_VERSION != 3
-#error "Version of the configuration file ui_nema_configuration.h is not compatible with this implementation."
-#endif
 
 // -----------------------------------------------------------------------------
 // Macros and Defines
@@ -326,7 +305,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawLine(MICROUI_GraphicsContext *gc, jint startX
 	return status;
 }
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_drawHorizontalLine(MICROUI_GraphicsContext *gc, jint x1, jint x2, jint y) {
 	DRAWING_Status status = DRAWING_DONE;
@@ -343,7 +322,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawHorizontalLine(MICROUI_GraphicsContext *gc, j
 
 #endif // ENABLE_SIMPLE_LINES
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_drawVerticalLine(MICROUI_GraphicsContext *gc, jint x, jint y1, jint y2) {
 	DRAWING_Status status = DRAWING_DONE;
@@ -360,7 +339,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawVerticalLine(MICROUI_GraphicsContext *gc, jin
 
 #endif // ENABLE_SIMPLE_LINES
 
-#ifdef ENABLE_SIMPLE_LINES
+#if defined ENABLE_SIMPLE_LINES && (ENABLE_SIMPLE_LINES == 1)
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_drawRectangle(MICROUI_GraphicsContext *gc, jint x1, jint y1, jint x2, jint y2) {
 	DRAWING_Status status = DRAWING_DONE;
@@ -492,7 +471,7 @@ DRAWING_Status UI_DRAWING_NEMA_copyImage(MICROUI_GraphicsContext *gc, MICROUI_Im
 	return status;
 }
 
-#ifdef ENABLE_IMAGE_ROTATION
+#if defined ENABLE_IMAGE_ROTATION && (ENABLE_IMAGE_ROTATION == 1)
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_drawRotatedImageBilinear(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint x, jint y,
                                                         jint rotationX, jint rotationY, jfloat angle, jint alpha) {
@@ -505,7 +484,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawRotatedImageBilinear(MICROUI_GraphicsContext 
 
 #endif // ENABLE_IMAGE_ROTATION
 
-#ifdef ENABLE_IMAGE_ROTATION
+#if defined ENABLE_IMAGE_ROTATION && (ENABLE_IMAGE_ROTATION == 1)
 // See the header file for the function documentation
 DRAWING_Status UI_DRAWING_NEMA_drawRotatedImageNearestNeighbor(MICROUI_GraphicsContext *gc, MICROUI_Image *img, jint x,
                                                                jint y, jint rotationX, jint rotationY, jfloat angle,
@@ -565,7 +544,7 @@ DRAWING_Status UI_DRAWING_NEMA_drawThickCircle(MICROUI_GraphicsContext *gc, jint
 	return _render_circle(gc, x, y, diameter, thickness, MSAA_DISABLED);
 }
 
-#ifdef ENABLE_FADED_LINES
+#if defined ENABLE_FADED_LINES && (ENABLE_FADED_LINES == 1)
 DRAWING_Status UI_DRAWING_NEMA_drawThickFadedLine(MICROUI_GraphicsContext *gc, jint startX, jint startY, jint endX,
                                                   jint endY, jint thickness, jint fade, DRAWING_Cap startCap,
                                                   DRAWING_Cap endCap) {

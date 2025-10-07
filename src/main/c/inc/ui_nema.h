@@ -1,7 +1,7 @@
 /*
  * C
  *
- * Copyright 2024-2025 MicroEJ Corp. All rights reserved.
+ * Copyright 2024-2025 MicroEJ Corp.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
@@ -18,7 +18,7 @@ extern "C" {
  * a set of helper functions to target the NEMA library.
  *
  * @author MicroEJ Developer Team
- * @version 4.0.1
+ * @version 5.0.0
  */
 
 // -----------------------------------------------------------------------------

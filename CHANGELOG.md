@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2025-10-07
+
+- Compatible with MicroEJ UI Pack 14.5.0.
+
+### Changed
+
+- Use the UI Pack 14.5.0 options convention.
+
+### Fixed
+
+- Fix the copyright headers.
+- Fix the useless include directive.
+
 ## [4.0.1] - 2025-05-20
 
 ### Fixed
@@ -82,7 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Make the CCO compatible with the UI Pack 14.0.0 (CCO MicroUI 4.0.0).
+- Make the C Module compatible with the UI Pack 14.0.0 (C Module MicroUI 4.0.0).
 
 ### Fixed
 
@@ -111,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fetch CCO com.microej.clibrary.llimpl#microui#3.1.0 (compatibility with UI Pack 13.7.0).
+- Fetch C Module com.microej.clibrary.llimpl#microui#3.1.0 (compatibility with UI Pack 13.7.0).
 
 ### Fixed
 
@@ -123,8 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
- - Creation of the CCO.
+ - Creation of the C Module.
 
 ---
-_Copyright 2023-2025 MicroEJ Corp. All rights reserved._\
+_Copyright 2023-2025 MicroEJ Corp._\
 _Use of this source code is governed by a BSD-style license that can be found with this software._

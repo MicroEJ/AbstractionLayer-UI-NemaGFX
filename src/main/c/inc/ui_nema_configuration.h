@@ -1,17 +1,17 @@
 /*
  * C
  *
- * Copyright 2023-2025 MicroEJ Corp. All rights reserved.
+ * Copyright 2023-2025 MicroEJ Corp.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
  */
 
 /*
  * @file
- * @brief MicroEJ MicroUI library low level API: implementation over NemaGFX. Provides
- * a set of defines to configure the implementation.
+ * @brief MicroEJ MicroUI library low level API: implementation over NemaGFX. Provides a set of defines to configure the
+ * implementation.
  *
- * Refer to the VEE Porting Guide > Graphics User Interface > C Module documentation to have more
- * information about the feature of this C module, how to use it and how to configure it.
+ * Refer to the VEE Porting Guide > Graphics User Interface > C Module documentation to have more information about the
+ * feature of this C module, how to use it and how to configure it.
  *
  * @author MicroEJ Developer Team
  */
@@ -23,37 +23,29 @@
 extern "C" {
 #endif
 
-/**
- * @brief Compatibility sanity check value.
- * This define value is checked in the implementation to validate that the version of this configuration
- * is compatible with the implementation.
- *
- * This value must not be changed by the user of the CCO.
- * This value must be incremented by the implementor of the CCO when a configuration define is added, deleted or
- * modified.
- */
-#define NEMA_CONFIGURATION_VERSION (3)
+// -----------------------------------------------------------------------------
+// Includes
+// -----------------------------------------------------------------------------
 
-#error \
-	"This header must be customized with VEE Port-specific configuration. Remove this #error when done. This file is not modified when a new version of the CCO is installed."
+#include "ui_configuration.h"
+
+// -----------------------------------------------------------------------------
+// Sanity checks
+// -----------------------------------------------------------------------------
+
+#if !defined DISPLAY_WIDTH || !defined DISPLAY_HEIGHT
+#error "Please define the display resolution."
+#endif
 
 // -----------------------------------------------------------------------------
 // Configuration
 // -----------------------------------------------------------------------------
 
 /*
- * @brief Specifies the display size
- */
-#define DISPLAY_WIDTH (480)
-#define DISPLAY_HEIGHT (480)
-
-/*
- * @brief Specifies the back buffer format (the buffer used by MicroUI, see
- * LLUI_DISPLAY_IMPL_initialize()). This format must be the same than the one set
- * in VEE Port configuration project. See display.properties, property "bpp".
+ * @brief Specifies the back buffer format (the buffer used by MicroUI, see LLUI_DISPLAY_IMPL_initialize()). This format
+ * must be the same than the one set in VEE Port configuration project. See display.properties, property "bpp".
  *
- * The BPP formats are not exactly the same between MicroEJ and NemaGFX. The available
- * options are:
+ * The BPP formats are not exactly the same between MicroEJ and NemaGFX. The available options are:
  *  _________________________________
  * | MicroEJ Format | NemaGFX Format |
  * |________________|________________|
@@ -64,23 +56,22 @@ extern "C" {
  * Notes:
  *
  * - This format is also used as destination format of the MicroUI BufferedImages.
- * - The pool of "tsi_malloc" must be large enough to store the buffer
- *   DISPLAY_WIDTH x DISPLAY_HEIGHT x BPP / 8.
+ * - The pool of "tsi_malloc" must be large enough to store the buffer DISPLAY_WIDTH x DISPLAY_HEIGHT x BPP / 8.
  * - The linker file probably needs adjusting.
  */
+#ifndef BACK_BUFFER_FORMAT
 #define BACK_BUFFER_FORMAT (NEMA_RGB565) // NEMA_RGB565 | NEMA_BGRA8888
+#endif
 
 /*
- * @brief Specifies the front buffer format. This format may be the different
- * from the BACK_BUFFER_FORMAT. This is useful to use a compressed format (TSCx) that
- * requires less memory than standard raster format.
+ * @brief Specifies the front buffer format. This format may be the different from the BACK_BUFFER_FORMAT. This is
+ * useful to use a compressed format (TSCx) that requires less memory than standard raster format.
  *
  * Notes:
  *
- * - The implementation of LLUI_DISPLAY_impl.h must be in COPY mode: the implementation
- * of flush() consists to copy the content of the BACK buffer to the FRONT buffer (the
- * implementation should use the functions UI_NEMA_configure_memcpy() and
- * UI_NEMA_start_memcpy()).
+ * - The implementation of LLUI_DISPLAY_impl.h must be in COPY mode: the implementation of flush() consists to copy the
+ * content of the BACK buffer to the FRONT buffer (the implementation should use the functions
+ * UI_NEMA_configure_memcpy() and UI_NEMA_start_memcpy()).
  * - In SWAP mode, both buffers (BACK and FRONT) must have the same format.
  *
  * The buffer size is:
@@ -89,35 +80,47 @@ extern "C" {
  * - TSC6: DISPLAY_WIDTH/4 * DISPLAY_HEIGHT/4 * 96/8 (96 bits per 4x4 block of pixels)
  * - TSC6A: DISPLAY_WIDTH/4 * DISPLAY_HEIGHT/4 * 96/8 (96 bits per 4x4 block of pixels)
  */
+#ifndef FRAME_BUFFER_FORMAT
 #define FRAME_BUFFER_FORMAT (BACK_BUFFER_FORMAT) // BACK_BUFFER_FORMAT | NEMA_TSC4 | NEMA_TSC6 | NEMA_TSC6A
+#endif
 
 // -----------------------------------------------------------------------------
 // Options
 // -----------------------------------------------------------------------------
 
 /*
- * @brief The software algorithms are faster than GPU to draw horizontal and vertical
- * lines; and by consequence to draw rectangles.
+ * @brief Set this define to 1 to use the GPU to draw horizontal lines, vertical lines and rectangles.
  *
- * By default these shapes are disabled and the software algorithms are used
- * instead.
+ * By default this option is disabled and the software algorithms are used instead (because the software algorithms are
+ * often faster than the GPU to draw these simple shapes).
  */
-//#define ENABLE_SIMPLE_LINES
+#ifndef ENABLE_SIMPLE_LINES
+#define ENABLE_SIMPLE_LINES (0)
+#endif
 
 /*
- * @brief The nema_draw_line_aa() API does not respect the thick faded line conditions
- * exactly: the line can be one pixel smaller across the width, one pixel shifted upwards,
- * etc. The differences appear depending on the thickness and fade of the line.
+ * @brief Set this define to 1 to use the GPU to draw thick faded lines.
  *
- * By default, this hardware acceleration is disabled.
+ * The nema_draw_line_aa() API does not respect the thick faded line conditions exactly: the line can be one pixel
+ * smaller across the width, one pixel shifted upwards, etc. The differences appear depending on the thickness and fade
+ * of the line.
+ *
+ * By default this option is disabled and the software algorithm is used instead.
  */
-//#define ENABLE_FADED_LINES
+#ifndef ENABLE_FADED_LINES
+#define ENABLE_FADED_LINES (0)
+#endif
 
 /*
- * @brief Some GPU might not able to render the images in specific memories. Comment
- * this define to not use the GPU to render the rotated images.
+ * @brief Set this define to 1 to use the GPU to draw images with rotation.
+ *
+ * Some GPU might not able to render the images in specific memories.
+ *
+ * By default this option is disabled and the software algorithms are used instead.
  */
-#define ENABLE_IMAGE_ROTATION
+#ifndef ENABLE_IMAGE_ROTATION
+#define ENABLE_IMAGE_ROTATION (1)
+#endif
 
 // -----------------------------------------------------------------------------
 // EOF
