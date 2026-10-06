@@ -10,7 +10,7 @@
  * @brief MicroEJ MicroUI library low level API: implementation of ui_drawing_nema.h.
  *
  * @author MicroEJ Developer Team
- * @version 5.0.0
+ * @version 5.0.2
  */
 
 // -----------------------------------------------------------------------------

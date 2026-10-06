@@ -1,17 +1,19 @@
 /*
  * C
  *
- * Copyright 2023-2025 MicroEJ Corp.
+ * Copyright 2023-2026 MicroEJ Corp.
  * Use of this source code is governed by a BSD-style license that can be found with this software.
+ *
+ * Build: 7E4D1F7C
  */
 
-/*
+/**
  * @file
  * @brief MicroEJ MicroUI library low level API: implementation over NemaGFX. Provides a set of defines to configure the
  * implementation.
  *
  * Refer to the VEE Porting Guide > Graphics User Interface > C Module documentation to have more information about the
- * feature of this C module, how to use it and how to configure it.
+ * feature of this Abstraction Layer, how to use it and how to configure it.
  *
  * @author MicroEJ Developer Team
  */
@@ -41,7 +43,7 @@ extern "C" {
 // Configuration
 // -----------------------------------------------------------------------------
 
-/*
+/**
  * @brief Specifies the back buffer format (the buffer used by MicroUI, see LLUI_DISPLAY_IMPL_initialize()). This format
  * must be the same than the one set in VEE Port configuration project. See display.properties, property "bpp".
  *
@@ -63,7 +65,7 @@ extern "C" {
 #define BACK_BUFFER_FORMAT (NEMA_RGB565) // NEMA_RGB565 | NEMA_BGRA8888
 #endif
 
-/*
+/**
  * @brief Specifies the front buffer format. This format may be the different from the BACK_BUFFER_FORMAT. This is
  * useful to use a compressed format (TSCx) that requires less memory than standard raster format.
  *
@@ -88,7 +90,7 @@ extern "C" {
 // Options
 // -----------------------------------------------------------------------------
 
-/*
+/**
  * @brief Set this define to 1 to use the GPU to draw horizontal lines, vertical lines and rectangles.
  *
  * By default this option is disabled and the software algorithms are used instead (because the software algorithms are
@@ -98,7 +100,7 @@ extern "C" {
 #define ENABLE_SIMPLE_LINES (0)
 #endif
 
-/*
+/**
  * @brief Set this define to 1 to use the GPU to draw thick faded lines.
  *
  * The nema_draw_line_aa() API does not respect the thick faded line conditions exactly: the line can be one pixel
@@ -111,7 +113,7 @@ extern "C" {
 #define ENABLE_FADED_LINES (0)
 #endif
 
-/*
+/**
  * @brief Set this define to 1 to use the GPU to draw images with rotation.
  *
  * Some GPU might not able to render the images in specific memories.

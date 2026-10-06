@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.2] - 2026-10-06
+
+### Changed
+
+- Compatible with MicroEJ UI Pack 14.5.5.
+- Complete the Doxygen documentation of the headers, and align the README with the other MicroEJ Abstraction Layers.
+
+## [5.0.1] - 2026-08-04
+
+### Fixed
+
+- Fix incorrect Doxygen comments in the NemaGFX drawing headers.
+
 ## [5.0.0] - 2025-10-07
 
 - Compatible with MicroEJ UI Pack 14.5.0.
@@ -31,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fetch the MicroUI C Module 14.1.0.
+- Fetch the MicroUI Abstraction Layer 14.1.0.
 
 ## [3.0.1] - 2024-10-01
 
@@ -39,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fetch the MicroUI C Module 14.0.3.
+- Fetch the MicroUI Abstraction Layer 14.0.3.
 
 ## [3.0.0] - 2024-07-19
 
@@ -95,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Make the C Module compatible with the UI Pack 14.0.0 (C Module MicroUI 4.0.0).
+- Make the Abstraction Layer compatible with the UI Pack 14.0.0 (MicroUI Abstraction Layer 4.0.0).
 
 ### Fixed
 
@@ -124,7 +137,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fetch C Module com.microej.clibrary.llimpl#microui#3.1.0 (compatibility with UI Pack 13.7.0).
+- Fetch Abstraction Layer com.microej.clibrary.llimpl#microui#3.1.0 (compatibility with UI Pack 13.7.0).
 
 ### Fixed
 
@@ -136,8 +149,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
- - Creation of the C Module.
+ - Creation of the Abstraction Layer.
 
 ---
-_Copyright 2023-2025 MicroEJ Corp._\
-_Use of this source code is governed by a BSD-style license that can be found with this software._
+_Copyright 2023-2026 MicroEJ Corp._\
+_Use of this source code is governed by a BSD-style license that can be found with this software._\
+_Build: 7E4D1F7C_
